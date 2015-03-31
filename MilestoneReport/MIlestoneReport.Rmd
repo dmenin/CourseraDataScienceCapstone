@@ -1,0 +1,135 @@
+---
+title: "MilestoneReport"
+author: "Diego Menin"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Data Science Coursera capstone - Milestone Report
+
+The goal of this report is  to display that I've gotten used to working with the data and that I am on track to create my prediction algorithm. This report explains my exploratory analysis and my goals for the eventual app and algorithm. 
+
+
+<br/>
+
+#The Data
+
+The data provided consists of 3 files for each of four languages (Danish, English, Finnish and Russian). Each file contains data from blogs, news/media sites and twitter. 
+In this analysis I will be focusing on the English files only These are called: en_US.blogs.txt, en_US.news.txt, en_US.twitter.txt.
+
+All three files together have over 500Mb, so to avoid having to upload them and run calculations at this report building time, I did a few summary calculations and saved the result on a RDS file called "basicInfo.RDS", which shows the file name, size, number of rows and number of words.
+
+
+```{r}
+library(ggplot2)
+basicInfo <- readRDS("basicInfo.RDS")
+basicInfo
+```
+
+
+Here I show a plot of File Name X Number of rows:
+
+```{r}
+ ggplot(data=basicInfo, aes(x=FileName, y=as.numeric(as.character(basicInfo$nRows)), fill=nRows)) +
+    geom_bar(colour="black", stat="identity") +
+    guides(fill=FALSE) + 
+    xlab("File Name") + 
+    ylab("Number of lines") +
+    ggtitle("Number of lines per file") + geom_text(aes(label= as.numeric(as.character(basicInfo$nRows))))
+
+```
+
+An interest fact we can note is that, even though the twitter file has the biggest number of rows, it has less words than the other two files and the reason is that each row can have 140 characters at maximum.
+
+
+<br/>
+
+##Data Selection and Word Analyzis
+
+The 3 data sets together have more than 100 Million words and are huge to fit in memory. Considering that the language on them will be slitly different (think about what you read on a news website versus what you read on titter), a decision was made to run the model builind only on one of the files, ignoring the other two.
+The file chosen was the twitter file, mainly due to the differsity of its language. I believe a more rich output can be produced considering that it probably has million different authors (one for each tweet)
+
+Here is an example of the file. Again, to prevent uploading and reading all the file during report built, I've selected a small subset (5 rows) of the file for diplaying pourpouses only.
+
+```{r}  
+  con <- file("en_US.twitter.txt", "r") 
+  f<- readLines(con) 
+  close(con)
+  f
+```
+
+
+<br/>
+
+#Data Transformations and Cleansing
+
+The data was loaded into R with the "readLines" function above and transformed into  a data frame. After that, a Corpus (tm package) was created from the data frame and a few cleansinbg procedures were called.
+
+The main cleaning activities were: 
+
+* Transfor everything to lower case;
+* Ponctuation removal
+* Number removal
+* URL removal
+
+
+There is one caviat about the process above. I believe that I can acquire a better result by, instead of removing the punctuation, replace it with an <END> symbol because punctuation usually represent the end of a thought thus, in theory,a new sentence is about to start. I will be testing this as part of the next steps.
+
+
+Here is the code used to clean the data. Again, to avoid having to upload all the file, the eval=FALSE tag was used so the code is only being printed, not evaluated.
+
+
+```{r, eval=FALSE} 
+  myCorpus <-Corpus(VectorSource(df))
+  
+  
+  myCorpus <- tm_map(myCorpus, content_transformer(tolower))
+  myCorpus <- tm_map(myCorpus, removePunctuation) 
+  myCorpus <- tm_map(myCorpus, removeNumbers) 
+  removeURL <- function(x) gsub("http[[:alnum:]]*", "", x) # remove URLs 
+  myCorpus <- tm_map(myCorpus, removeURL) 
+``` 
+
+The training data was created using the first 100.000 rows of the file.
+For the final submisison, the idea is to:
+
+* Increase the number of rows;
+* Create a more random way to select the rows;
+
+
+#Tokenizer and n-grams
+
+A tokenizer, 2-gram and 3-gram were built on the training set using the tm package.
+Bellow you can see the top 10 count of individual tokes, 2 grams and 3 grams.
+Again in this case, the calculation is not being done on the fly. I ran the analysis locally and saved the result.
+
+```{r} 
+  library(data.table)
+  dt_n1 <- readRDS("dt_n1.RDS")  
+  listWordsN1 <- dt_n1[][order(-freq)][1:10,] 
+
+  dt_n2 <- readRDS("dt_n2.RDS")  
+  listWordsN2 <- dt_n2[][order(-freq)][1:10,] 
+  listWordsN2$rep <- paste(listWordsN2$gram," ",listWordsN2$target)
+  
+  dt_n3 <- readRDS("dt_n3.RDS")  
+  listWordsN3 <- dt_n3[][order(-freq)][1:10,] 
+  listWordsN3$rep <- paste(listWordsN3$gram," ",listWordsN3$target) 
+  
+``` 
+
+```{r} 
+barplot(listWordsN1$freq, names.arg=listWordsN1$target, main="Top 10 Word Distribution on the training set", ylab="Count Word", col="dark blue")
+
+barplot(listWordsN2$freq, names.arg=listWordsN2$rep, main="Top 10 bigram Distribution on the training set", ylab="Count Word", col="dark blue", las=2, space=1)
+
+barplot(listWordsN3$freq, names.arg=listWordsN3$rep, main="Top 10 3-gram Distribution on the training set", ylab="Count Word", col="dark blue",las=2)
+``` 
+
+
+#Next Steps
+
+The next steps are mainly:
+
+* Calculate the frequency of the n-grams
+* Build  Shiny application that uses a  text input to predict the next word using the word the user typed.
