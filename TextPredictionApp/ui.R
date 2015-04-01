@@ -2,11 +2,22 @@ shinyUI(fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      h3("Type here"),
       
-      textInput("ptext", "Text to predict:", "")      
- 
-      
+      textInput("ptext", "Text to predict:", ""),
+       fluidRow(        
+#         column(4,submitButton("Submit")),
+#         column(4,submitButton("Submit")),
+#         column(4,submitButton("Submit"))
+#         column(4,actionButton("b1", label = "Action")),
+#         column(4,actionButton("b2", label = "Action")),
+#         column(4,actionButton("b3", label = "Action"))
+          column(4,uiOutput("b1")),
+          column(4,uiOutput("b2")),
+          column(4,uiOutput("b3"))
+          
+       )
+  
+
     ),
     mainPanel(
       p("This is Version 0.1 of my Text Predictor for the Coursera Data Science Capstone Project."),

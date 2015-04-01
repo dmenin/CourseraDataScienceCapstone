@@ -66,11 +66,17 @@ saveRDS(dt_n2,"dt_n2.RDS")
 saveRDS(dt_n3,"dt_n3.RDS")
 
 
+#dt_n1 <- readRDS("dt_n1.RDS")
+#dt_n2 <- readRDS("dt_n2.RDS")
+#dt_n3 <- readRDS("dt_n3.RDS")
 
 #test  
 #  suggestWord("",dt_n1,dt_n2,dt_n3)
 #  suggestWord("the",dt_n1,dt_n2,dt_n3)
 #  suggestWord("the fist",dt_n1,dt_n2,dt_n3)
+
+
+
   
   
 #  dt_n1[][order(-freq)][1:3,]  

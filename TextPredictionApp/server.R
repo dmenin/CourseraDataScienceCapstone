@@ -23,16 +23,24 @@ loadN3 <- reactive({
 
 shinyServer(
   function (input, output) {
+    
+    basedataset <- reactive({
+      
+      source('suggestword.R')
+      predict<-(input$ptext)      
+      dt_n1 <- loadN1()
+      dt_n2 <- loadN2()
+      dt_n3 <- loadN3()
+      
+      ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3)      
+    })  
+    
+    
 
       output$myView <- renderTable({        
-          source('suggestword.R')
-          predict<-(input$ptext)      
-          dt_n1 <- loadN1()
-          dt_n2 <- loadN2()
-          dt_n3 <- loadN3()
-       
-          ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3)
-          ret <- subset(ret, select = -c(freq))
+        k <- basedataset()
+        k <- subset(k, select = -c(freq))
+        k
       })	
   
       output$caption <- renderText({      
@@ -40,7 +48,22 @@ shinyServer(
         predict
       })   
       
-
+      output$b1 <- renderUI({
+        k <- basedataset()
+        
+        actionButton("action1", label = k[1]$target)
+      })
+      
+      output$b2 <- renderUI({
+        k <- basedataset()
+        
+        actionButton("action2", label = k[2]$target)
+      })      
+       output$b3 <- renderUI({
+         k <- basedataset()
+         
+         actionButton("action3", label = k[3]$target)
+      })
   }
 )
 
