@@ -16,7 +16,6 @@ shinyUI(fluidPage(
           column(4,uiOutput("b3"))
           
        )
-  
 
     ),
     mainPanel(
@@ -44,7 +43,8 @@ shinyUI(fluidPage(
 
       h3("Top 3 suggestions:"),
 
-      tableOutput("myView")
+      tableOutput("myView"),
+      plotOutput("plot")
     )
   )
 ))
