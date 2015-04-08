@@ -1,7 +1,7 @@
 buildNGram <- function(filePath, nrows, minGram, maxGram)
 {
-  #con <- file("c:\\git\\capstone\\0ModelData\\en_US\\en_US.twitter.txt", "r") 
-  #con <- file("c:\\git\\capstone\\0ModelData\\en_US_small\\en_US.twitter_small.txt","r")  
+  #con <- file("c:\\git\\capstone\\final\\en_US\\en_US.twitter.txt", "r") 
+  #con <- file("c:\\git\\capstone\\final\\en_US_small\\en_US.twitter_small.txt","r")
   con <- file(filePath, "r") 
   a<- readLines(con,nrows) 
   close(con)

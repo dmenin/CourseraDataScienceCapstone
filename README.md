@@ -14,6 +14,13 @@ ReadMe
 	
 
 * Updates:	
+	* 08/04/2015:
+		* added 4 grams where frequency > 1 (otherwise model becomes too big)
+		* add % frequency on the graph
+		* fixed the graph size, increase labels  - improved overall layout
+		* dealt with NAs on the predictions. If nothing is found on the n-grams, default to unigram
+		* added "advanced" checkbox to control whether graps\grid are displayed.
+		
 	* 02/04/2015:
 		* Added recursion when nWord>1; 
 		* Added v1 of the graph
@@ -26,13 +33,7 @@ ReadMe
 		* Repository created
 		
 * TO DO:
-	* 4 grams
-	* add % frequency
-	* maps "." to end on the model build
-	* deal with NAs on the predictions
+	* maps "." to end on the model build (?)
 	* (doParalel on the model build)
 	* add the python code to get twitter data to the repo
-	* fix graph size, increase labels  - improve overall layout
-	* add "advanced" checkbox to control whether graps\grid are displayed
-	
 	
