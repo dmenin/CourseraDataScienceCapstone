@@ -78,8 +78,8 @@ rm(list = ls())
 
 saveRDS(dt_n1,"N_dt_n1.RDS")
 saveRDS(dt_n2,"N_dt_n2.RDS")
-saveRDS(dt_n3,"N_dt_n3.RDS")
-saveRDS(dtdt_n4[freq>1]_n4,"N_dt_n4.RDS")
+saveRDS(dt_n3[freq>1],"N_dt_n3.RDS")
+saveRDS(dt_n4[freq>1],"N_dt_n4.RDS")
 
 
 

@@ -12,16 +12,16 @@ library(scales) #allows the % formating on the graph
 #setwd("C:\\git\\capstone\\TextPredictionApp")
 
 loadN1 <- reactive({      
-  dt_n1 <- readRDS("dt_n1.RDS")         
+  dt_n1 <- readRDS("N_dt_n1.RDS")         
 })
 loadN2 <- reactive({      
-  dt_n2 <- readRDS("dt_n2.RDS")      
+  dt_n2 <- readRDS("N_dt_n2.RDS")      
 })    
 loadN3 <- reactive({      
-  dt_n3 <- readRDS("dt_n3.RDS")      
+  dt_n3 <- readRDS("N_dt_n3.RDS")      
 })  
 loadN4 <- reactive({      
-  dt_n4 <- readRDS("dt_n4.RDS")
+  dt_n4 <- readRDS("N_dt_n4.RDS")
 }) 
 
 
@@ -55,19 +55,25 @@ shinyServer(
 #         predict<-(input$ptext)      
 #         predict
 #       })   
-      
+      # good thing to
       output$b1 <- renderUI({
         k <- basedataset()     
-        actionButton(inputId = "action1", label = k[1]$target)
+        l<-""
+        if (!is.na(k[1]$target)) {l=k[1]$target}
+        actionButton(inputId = "action1", label = l)
       })
       
       output$b2 <- renderUI({
         k <- basedataset()   
-        actionButton("action2", label = k[2]$target )
+        l<-""
+        if (!is.na(k[2]$target)) {l=k[2]$target}
+        actionButton("action2", label = l )
       })      
        output$b3 <- renderUI({         
          k <- basedataset()
-         actionButton("action3", label = k[3]$target)
+         l<-""
+         if (!is.na(k[3]$target)) {l=k[3]$target}
+         actionButton("action3", label = l)
       })      
     
     
