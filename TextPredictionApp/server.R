@@ -12,16 +12,16 @@ library(scales) #allows the % formating on the graph
 #setwd("C:\\git\\capstone\\TextPredictionApp")
 
 loadN1 <- reactive({      
-  dt_n1 <- readRDS("N_dt_n1.RDS")         
+  dt_n1 <- readRDS("n1.RDS")         
 })
 loadN2 <- reactive({      
-  dt_n2 <- readRDS("N_dt_n2.RDS")      
+  dt_n2 <- readRDS("n2.RDS")      
 })    
 loadN3 <- reactive({      
-  dt_n3 <- readRDS("N_dt_n3.RDS")      
+  dt_n3 <- readRDS("n3.RDS")      
 })  
 loadN4 <- reactive({      
-  dt_n4 <- readRDS("N_dt_n4.RDS")
+  dt_n4 <- readRDS("n4.RDS")
 }) 
 
 

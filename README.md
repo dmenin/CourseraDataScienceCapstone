@@ -14,6 +14,9 @@ ReadMe
 	
 
 * Updates:	
+	* 09/04/2015:
+		* The Model Build Function was broken into two, a MainModelBuild, which calls the model build once per gram, so I don’t have the same piece of code repeated 4 times. The file paths are still hard coded on the function; won’t change it for the time being because it is only going to be called locally anyway.
+	
 	* 08/04/2015:
 		* added 4 grams where frequency > 1 (otherwise model becomes too big)
 		* add % frequency on the graph
@@ -34,7 +37,6 @@ ReadMe
 		
 * TO DO:
 	* maps "." to end on the model build (?)
-	* (doParalel on the model build)
 	* add the python code to get twitter data to the repo
 	
 	
