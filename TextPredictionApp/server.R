@@ -37,7 +37,7 @@ shinyServer(
       dt_n3 <- loadN3()
       dt_n4 <- loadN4()
       
-      ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3, dt_n4)      
+      ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3, dt_n4,0)      
       ret<-na.omit(ret)
     })  
     
@@ -64,16 +64,20 @@ shinyServer(
       })
       
       output$b2 <- renderUI({
-        k <- basedataset()   
-        l<-""
-        if (!is.na(k[2]$target)) {l=k[2]$target}
-        actionButton("action2", label = l )
+        if (input$adv) {
+          k <- basedataset()   
+          l<-""
+          if (!is.na(k[2]$target)) {l=k[2]$target}
+          actionButton("action2", label = l )
+        }
       })      
-       output$b3 <- renderUI({         
-         k <- basedataset()
-         l<-""
-         if (!is.na(k[3]$target)) {l=k[3]$target}
-         actionButton("action3", label = l)
+       output$b3 <- renderUI({    
+         if (input$adv) {
+           k <- basedataset()
+           l<-""
+           if (!is.na(k[3]$target)) {l=k[3]$target}
+           actionButton("action3", label = l)
+         }
       })      
     
     
