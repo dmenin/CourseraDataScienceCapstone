@@ -1,4 +1,4 @@
-#use stringr?
+library(tm)
 
 suggestWord <- function(etext,dt_n1,dt_n2,dt_n3,dt_n4, rec_count=0)
 {
@@ -63,8 +63,8 @@ trim.trailing <- function (x) sub("\\s+$", "", x)
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 #rm(suggestWord)
-etext <-"Cloud computing has opened the world of new opportunities for Information Technology Industry. The enterprises are quite optimistic about this new buzz. Cloud computing as a “computing mode   "
-suggestWord(etext,dt_n1,dt_n2,dt_n3,dt_n4,0)
+#etext <-"Cloud computing has opened the world of new opportunities for Information Technology Industry. The enterprises are quite optimistic about this new buzz. Cloud computing as a “computing mode   "
+#suggestWord(etext,dt_n1,dt_n2,dt_n3,dt_n4,0)
 # 
 # etext
 

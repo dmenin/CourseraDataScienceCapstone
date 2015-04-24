@@ -1,4 +1,3 @@
-#C:\git\capstone\TextPredictionApp
 shinyUI(fluidPage(
   br(),
   br(),
@@ -8,6 +7,11 @@ shinyUI(fluidPage(
   br(),  
   br(),  
   
+  br(),
+  br(),  
+  br(),    
+  br(),    
+  
   tags$head(tags$style(HTML("
        body {
             background: url(img/back.jpg);
@@ -15,8 +19,6 @@ shinyUI(fluidPage(
             background-repeat: no-repeat;
         }                        
     "))),
-
-  #background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Kakerdaja_raba_talvine_maastik.jpg/640px-Kakerdaja_raba_talvine_maastik.jpg);  
   
 #  sidebarLayout(
 
@@ -37,8 +39,8 @@ shinyUI(fluidPage(
     mainPanel(
     
      fluidRow( 
-       column(8,plotOutput("plot")),
-       column(2,tableOutput("myView"))       
+       column(8,plotOutput("plot"))
+       #column(2,tableOutput("myView"))       
      )
     )
   #)

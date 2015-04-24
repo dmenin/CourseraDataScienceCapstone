@@ -13,7 +13,13 @@ ReadMe
 	* Input: ngrams created with 1BuildModel
 	
 
-* Updates:	
+* Updates:		
+	* 24/04/2015
+		* Added final rpubs presentation - https://rpubs.com/dmenin/DataScienceCapstone
+		* Application published to shiny apps - https://rpubs.com/dmenin/DataScienceCapstone
+		* Adapted UI to the browser - It doesn't look good from RStudio, but it look of from the browser
+		* Removed the grid from the advanced options and added title to the graph
+		
 	* 20/04/2015
 		* Changes on the UI to add background image
 		* Fixed bug that was causing infinite loop on the recursion

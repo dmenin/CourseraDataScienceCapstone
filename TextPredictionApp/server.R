@@ -37,19 +37,19 @@ shinyServer(
       dt_n3 <- loadN3()
       dt_n4 <- loadN4()
       
-      ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3, dt_n4,0)      
+      ret <- suggestWord(predict,dt_n1,dt_n2,dt_n3,dt_n4,0)      
       ret<-na.omit(ret)
     })  
     
     
 #      this is the table output:
-      output$myView <- renderTable({
-        if (input$adv) {
-          k <- basedataset()
-          k <- subset(k, select = -c(freq))
-          k
-        }
-      })	
+#       output$myView <- renderTable({
+#         if (input$adv) {
+#           k <- basedataset()
+#           k <- subset(k, select = -c(freq))
+#           k
+#         }
+#       })	
   
 #       output$caption <- renderText({      
 #         predict<-(input$ptext)      
@@ -120,6 +120,7 @@ shinyServer(
           scale_y_continuous(labels=percent) +
           geom_bar(stat = "identity", fill = "grey50", colour = "black") +
           theme_classic() +
+          ggtitle("Frequency of the 'next word' being predicted\n(This is not the overall frequency across the model)") +
           theme(axis.text.x = element_text(angle = 0), axis.ticks.x = element_blank())
         }
       }
