@@ -16,7 +16,7 @@ ReadMe
 * Updates:		
 	* 24/04/2015
 		* Added final rpubs presentation - https://rpubs.com/dmenin/DataScienceCapstone
-		* Application published to shiny apps - https://rpubs.com/dmenin/DataScienceCapstone
+		* Application published to shiny apps - https://dmenin.shinyapps.io/TextPredicitonApp/
 		* Adapted UI to the browser - It doesn't look good from RStudio, but it look of from the browser
 		* Removed the grid from the advanced options and added title to the graph
 		
