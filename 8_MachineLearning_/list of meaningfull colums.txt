@@ -1,0 +1,119 @@
+c("num_window",	"pitch_arm",	"pitch_belt",	"pitch_dumbbell",	"pitch_forearm",	"raw_timestamp_part_1",	"raw_timestamp_part_2",	"roll_arm",	"roll_belt",	"roll_dumbbell",	"roll_forearm",	"total_accel_arm",	"total_accel_belt",	"total_accel_dumbbell",	"total_accel_forearm",	"yaw_arm",	"yaw_belt",	"yaw_dumbbell",	"yaw_forearm",	"accel_arm_x",	"accel_arm_y",	"accel_arm_z",	"accel_belt_x",	"accel_belt_y",	"accel_belt_z",	"accel_dumbbell_x",	"accel_dumbbell_y",	"accel_dumbbell_z",	"accel_forearm_x",	"accel_forearm_y",	"accel_forearm_z",	"gyros_arm_x",	"gyros_arm_y",	"gyros_arm_z",	"gyros_belt_x",	"gyros_belt_y",	"gyros_belt_z",	"gyros_dumbbell_x",	"gyros_dumbbell_y",	"gyros_dumbbell_z",	"gyros_forearm_x",	"gyros_forearm_y",	"gyros_forearm_z",	"magnet_arm_x",	"magnet_arm_y",	"magnet_arm_z",	"magnet_belt_x",	"magnet_belt_y",	"magnet_belt_z",	"magnet_dumbbell_x",	"magnet_dumbbell_y",	"magnet_dumbbell_z",	"magnet_forearm_x",	"magnet_forearm_y",	"magnet_forearm_z")
+
+
+
+num_window,
+pitch_arm,
+pitch_belt,
+pitch_dumbbell,
+pitch_forearm,
+raw_timestamp_part_1,
+raw_timestamp_part_2,
+roll_arm,
+roll_belt,
+roll_dumbbell,
+roll_forearm,
+total_accel_arm,
+total_accel_belt,
+total_accel_dumbbell,
+total_accel_forearm,
+yaw_arm,
+yaw_belt,
+yaw_dumbbell,
+yaw_forearm,
+accel_arm_x,
+accel_arm_y,
+accel_arm_z,
+accel_belt_x,
+accel_belt_y,
+accel_belt_z,
+accel_dumbbell_x,
+accel_dumbbell_y,
+accel_dumbbell_z,
+accel_forearm_x,
+accel_forearm_y,
+accel_forearm_z,
+gyros_arm_x,
+gyros_arm_y,
+gyros_arm_z,
+gyros_belt_x,
+gyros_belt_y,
+gyros_belt_z,
+gyros_dumbbell_x,
+gyros_dumbbell_y,
+gyros_dumbbell_z,
+gyros_forearm_x,
+gyros_forearm_y,
+gyros_forearm_z,
+magnet_arm_x,
+magnet_arm_y,
+magnet_arm_z,
+magnet_belt_x,
+magnet_belt_y,
+magnet_belt_z,
+magnet_dumbbell_x,
+magnet_dumbbell_y,
+magnet_dumbbell_z,
+magnet_forearm_x,
+magnet_forearm_y,
+magnet_forearm_z,
+
+
+
+
+F1 : id 1 to 19622
+Num Window
+Pitch Arm
+Pitch Belt
+Pitch Dumbbell
+Pitch Forearm
+Raw Timestamp Part 1	
+Raw Timestamp Part 2
+Roll Arm	
+Roll Belt	
+Roll Dumbbell	
+Roll Forearm	
+Total Accel Arm	
+Total Accel Belt	
+Total Accel Dumbbell	
+Total Accel Forearm	
+Yaw Arm	
+Yaw Belt	
+Yaw Dumbbell	
+Yaw Forearm
+Accel Arm X	
+Accel Arm Y	
+Accel Arm Z
+Accel Belt X	
+Accel Belt Y	
+Accel Belt Z	
+Accel Dumbbell X	
+Accel Dumbbell Y	
+Accel Dumbbell Z	
+Accel Forearm X	
+Accel Forearm Y	
+Accel Forearm Z
+Gyros Arm X	
+Gyros Arm Y	
+Gyros Arm Z	
+Gyros Belt X	
+Gyros Belt Y	
+Gyros Belt Z	
+Gyros Dumbbell X	
+Gyros Dumbbell Y	
+Gyros Dumbbell Z	
+Gyros Forearm X	
+Gyros Forearm Y	
+Gyros Forearm Z	
+Magnet Arm X	
+Magnet Arm Y	
+Magnet Arm Z	
+Magnet Belt X	
+Magnet Belt Y	
+Magnet Belt Z	
+Magnet Dumbbell X	
+Magnet Dumbbell Y	
+Magnet Dumbbell Z	
+Magnet Forearm X	
+Magnet Forearm Y	
+Magnet Forearm Z

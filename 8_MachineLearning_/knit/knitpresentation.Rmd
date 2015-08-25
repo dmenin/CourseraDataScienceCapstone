@@ -1,0 +1,72 @@
+---
+title: "Coursera Machine Learning"
+author: "Diego Menin"
+date: "Wednesday, February 18, 2015"
+output: html_document
+---
+
+## Summary  
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self-movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behaviour, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. 
+
+The goal of this project is to use Machine Learning techniques to predict whether users are performing exercises correctly or not based on data collected data from accelerometers on the belt, forearm, arm, and dumbbell of 6 participants, who were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har
+
+
+## Registering Libraries
+
+A few R libriries are necessary to perform the Anlysis.
+```{r, echo=FALSE}
+library(caret);
+library(plyr);
+library(randomForest);
+```
+
+## Loading data
+
+We load the training data can be found here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv an split it into training and testing datsets by running the createDataPartition function:
+
+
+```{r}
+full <-  read.csv("C:\\git\\machinelearning\\pml-training.csv")
+
+#By default, simple bootstrap resampling is used 
+inTrain <- createDataPartition(y=full$classe, p=0.75,list = FALSE)
+train <- full[inTrain,]
+test <- full[-inTrain,]
+```
+
+## Variable Selection
+
+The full data set has 160 variables, most of which are not usefull for prediction due to the huge amount of null (or NA's) values. So, an analysis was run on each of the variables to identify the ones who are suitable to be used. The whole analysis code won't be included here because its huge, but as an example I can show variable "kurtosis_picth_belt" which has 19216 "blank" values ou of 19622 thus not meaningfull to the analysis.
+
+```{r}
+head(count(full, "kurtosis_picth_belt"))
+```
+
+So after the analysins, the Unnecessary variables are removed from the train data.
+```{r}
+#Removing Unnecessary variables from the train data.
+
+train <- train[,c("classe", "num_window",    "pitch_arm",  "pitch_belt",  "pitch_dumbbell",  "pitch_forearm",	"roll_arm",	"roll_belt",	"roll_dumbbell",	"roll_forearm",	"total_accel_arm",	"total_accel_belt",	"total_accel_dumbbell",	"total_accel_forearm",	"yaw_arm",	"yaw_belt",	"yaw_dumbbell",	"yaw_forearm",	"accel_arm_x",	"accel_arm_y",	"accel_arm_z",	"accel_belt_x",	"accel_belt_y",	"accel_belt_z",	"accel_dumbbell_x",	"accel_dumbbell_y",	"accel_dumbbell_z",	"accel_forearm_x",	"accel_forearm_y",	"accel_forearm_z",	"gyros_arm_x",	"gyros_arm_y",	"gyros_arm_z",	"gyros_belt_x",	"gyros_belt_y",	"gyros_belt_z",	"gyros_dumbbell_x",	"gyros_dumbbell_y",	"gyros_dumbbell_z",	"gyros_forearm_x",	"gyros_forearm_y",	"gyros_forearm_z",	"magnet_arm_x",	"magnet_arm_y",	"magnet_arm_z",	"magnet_belt_x",	"magnet_belt_y",	"magnet_belt_z",	"magnet_dumbbell_x",	"magnet_dumbbell_y",	"magnet_dumbbell_z",	"magnet_forearm_x",	"magnet_forearm_y",	"magnet_forearm_z")]
+```
+
+
+## Run Analysis
+
+A model is created using random Forests with 50 trees and the test data is predicted using the model:
+```{r}
+fitforest <- randomForest(classe ~ ., data=train, ntree=50)
+predForest <-predict(fitforest, test)
+```
+
+Then a confusion matrix is built to check the Out of sample error using cross-validation.
+We can also analyse Sensitivity and Specificit by class
+```{r}
+cm <- confusionMatrix(predForest, test$classe)
+cm$table
+
+ cm$byClass
+```
+
+
+
