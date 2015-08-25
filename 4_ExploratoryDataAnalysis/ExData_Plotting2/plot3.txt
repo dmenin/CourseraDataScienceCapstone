@@ -1,0 +1,15 @@
+plot3 <- function()
+{
+	library(ggplot2)
+	nei <- readRDS("summarySCC_PM25.rds")
+	scc <- readRDS("Source_Classification_Code.rds")
+      
+      plot3data <- nei[nei$fips=="24510",]
+	plot3 <- melt(plot3data, id=c("type","year"), measure.vars="Emissions")
+
+	x <- dcast(plot3, year + type ~ variable, sum)
+
+	
+	p <- ggplot(data=x, aes(x=year, y=Emissions, group=type, color=type)) + geom_line(size=1.5) + geom_point(size=3) + xlab("Year") + ylab("Emissions(tons)") + ggtitle("Which type of sources have seen increase or decreases \nin emissions from 1999–2008 for Baltimore City?")
+	ggsave("plot3.png", plot = p,  width=6, height=6, dpi=100)
+}

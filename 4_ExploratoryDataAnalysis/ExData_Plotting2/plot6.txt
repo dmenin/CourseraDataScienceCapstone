@@ -1,0 +1,23 @@
+plot6 <- function()
+{
+	library(reshape2)
+	library(ggplot2)
+	nei <- readRDS("summarySCC_PM25.rds")
+	scc <- readRDS("Source_Classification_Code.rds")
+      
+      plot6data <- nei[nei$fips %in% c("06037","24510"),]
+
+	filter_class <- subset(scc, grepl("motor", scc$Short.Name, ignore.case=TRUE))
+	mergedData6 <- merge(plot6data,filter_class,by.x="SCC",by.y="SCC")
+
+
+
+	plot6 <- melt(mergedData6 , id=c("year","fips"), measure.vars="Emissions")
+
+	x <- dcast(plot6, year + fips ~ variable, sum)
+
+	bp <- ggplot(data=x, aes(x=year, y=Emissions, group=fips, shape = fips, colour =fips)) + geom_line(size=1.5) + geom_point(size=3)+ xlab("Year") + ylab("Motor Vehicle Sources Emissions(tons)") + ggtitle("Emissions comparisson from motor vehicle sources \nbetween Baltimore City and Los Angeles County")
+	p <- bp + scale_shape_discrete(name  ="City", breaks=c("06037", "24510"), labels=c("Baltimore City", "Los Angeles County"))  + scale_colour_discrete(name  ="City", breaks=c("06037", "24510"), labels=c("Baltimore City", "Los Angeles County"))
+	ggsave("plot6.png", plot = p,  width=6, height=6, dpi=100)
+}
+

@@ -1,0 +1,74 @@
+---
+title: "StatisticalInferenceDMenin"
+author: "Diego Menin"
+date: "Friday, October 24, 2014"
+output: pdf_document
+---
+
+
+
+#Assignment Part 2
+In the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
+
+1 and 2) Load the ToothGrowth data, perform some basic exploratory data analyses and Provide a basic summary of the data. 
+
+```{r}
+library(reshape2)
+library(ggplot2)
+library(plyr)
+
+t <- ToothGrowth
+t$dose <- factor(t$dose)
+levels(t$supp) <- c("Orange Juice", "Ascorbic Acid")
+```
+
+The dataset we are working with is called "The Effect of Vitamin C on Tooth Growth in Guinea Pigs". and contains the response is the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid).
+
+
+The first conclusion we can get is that Vitamin C does affect the teeth length. 
+If we ignore the delivery method for a moment and jusdt compare dosage with length, well see that Guinea Pigs that got 0.5 mg got an average of   10.61 mm increase (with a max of 21.5mm)
+and Pigs that got 2 dosages increased on average 26.10mm (with a max of 33.9mm)
+
+```{r}
+ddply(t, 'dose', summarise, average_growth = mean(len), max_growth  = max(len))
+```
+
+
+If we bring the delivery method into consideration, Oranje juice seems to be the best oprion when dosage is 0.5 or 1.
+On smaller doses (0,5mg), the average teeth growth was 65% better on orange juice than on ascorbic acid (13.23mm against 7.98mm)
+On medium doses the behaviour is the same with a 35% better performance on Orange Juice (22.7mm against 16.77)
+
+When the dosage is higher on the other hand, on average, Ascorbic Acid seems to have a slitgly advantage over Orange juice 26.14 over 26.06
+
+```{r}
+tapply(t$len, list(t$supp, t$dose), mean)
+```
+
+
+3)Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there's other approaches worth considering)
+
+We are going to perfor 2 tests, 0.5mg dosage versus 1 mg dosage and 1mg dosage vs 2mg dosage
+
+```{r}
+t1 <- subset(t, dose %in% c(0.5,1))
+t.test(len ~ dose, paired=FALSE, var.equal=FALSE, data=t1)
+
+
+t2 <- subset(t, dose %in% c(1,2))
+t.test(len ~ dose, paired=FALSE, var.equal=FALSE, data=t2)
+```
+
+
+
+4) State your conclusions and the assumptions needed for your conclusions. 
+
+Conclusions:
+* Vitamin C DOES have an effect on teeth lenght
+* The delivery method of Vitamine C matters on small and medium dosages but doesnt seem to matter much as the dosage incrases
+
+Assumptions:
+* Dosages are classified as small - medium and large, being 0.5mg, 1mg and 2mg respectively
+
+
+
+

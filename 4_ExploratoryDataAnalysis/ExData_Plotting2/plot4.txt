@@ -1,0 +1,21 @@
+plot4 <- function()
+{
+	library(reshape2)
+	nei <- readRDS("summarySCC_PM25.rds")
+	scc <- readRDS("Source_Classification_Code.rds")
+      
+	filter_class <- subset(scc, grepl("comb.*coal", scc$Short.Name, ignore.case=TRUE))
+	mergedData <- merge(nei,filter_class,by.x="SCC",by.y="SCC")
+
+
+
+	plot4 <- melt(mergedData , id="year", measure.vars="Emissions")
+
+	x <- dcast(plot4, year ~ variable, sum)
+	x$Emissions <- x$Emissions/1000
+
+	png(filename="plot4.png")
+      b <-barplot(x$Emissions, ylab="Coal combustion-related sources Emissions (kilotons)", xlab="Year", col="blue", main="Across the United States, how have emissions from coal \ncombustion-related sources changed from 1999–2008?")
+	axis(1,at=b,labels=x$year)
+	dev.off()
+}

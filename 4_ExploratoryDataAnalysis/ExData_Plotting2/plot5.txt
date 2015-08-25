@@ -1,0 +1,22 @@
+plot5 <- function()
+{
+	library(reshape2)
+	nei <- readRDS("summarySCC_PM25.rds")
+	scc <- readRDS("Source_Classification_Code.rds")
+      
+      plot5data <- nei[nei$fips=="24510",]
+
+	filter_class <- subset(scc, grepl("motor", scc$Short.Name, ignore.case=TRUE))
+	mergedData <- merge(plot5data,filter_class,by.x="SCC",by.y="SCC")
+
+
+
+	plot5 <- melt(mergedData , id="year", measure.vars="Emissions")
+
+	x <- dcast(plot5, year ~ variable, sum)
+
+	png(filename="plot5.png")
+	b <-barplot(x$Emissions, ylab="Motor Vehicle Sources Emissions (tons)", xlab="Year", col="blue", main="How have emissions from motor vehicle sources changed \nfrom 1999–2008 in Baltimore City")
+	axis(1,at=b,labels=x$year)
+	dev.off()
+}

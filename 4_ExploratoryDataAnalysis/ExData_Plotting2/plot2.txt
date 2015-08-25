@@ -1,0 +1,16 @@
+plot2 <- function()
+{
+	library(reshape2)
+	nei <- readRDS("summarySCC_PM25.rds")
+	scc <- readRDS("Source_Classification_Code.rds")
+      
+      plot2data <- nei[nei$fips=="24510",]
+	plot2 <- melt(plot2data, id="year", measure.vars="Emissions")
+
+	x <- dcast(plot2, year ~ variable, sum)
+
+	png(filename="plot2.png")
+      b <-barplot(x$Emissions, ylab="Emissions (tons)", xlab="Year", col="blue", main="Have total emissions from PM2.5 decreased \nin the Baltimore City, Maryland from 1999 to 2008?? \nAnswer: Yes")
+	axis(1,at=b,labels=x$year)
+	dev.off()
+}

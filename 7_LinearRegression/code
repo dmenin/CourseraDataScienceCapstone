@@ -1,0 +1,66 @@
+#> mat<-cor(mtcars)
+#> apply(mat, 1:2, function(x) if(x>0.8 || x < -0.8) {x} else {0} )
+
+#install.packages("scatterplot3d")
+#library(scatterplot3d)
+
+
+cars <- mtcars
+ cars$am <- as.factor(cars$am)
+levels(cars$am) <-c("Auto", "Manual")
+
+#A simple box plot shows that manual cars do more miles per gallon than Auto cars
+
+plot(cars$am, cars$mpg)
+
+
+#And a simple linear regresion predicting mpg using transmission shows that a change from Auto to Manual would result in a 7.2 increase in consumption
+
+fit <- lm(mpg ~ am, data= cars)
+#using the original mtcars dataset because on this dataset the am variable is a number so it automatic produces  a scaterplot
+plot(mtcars$am, mtcars$mpg) 
+abline(fit)
+
+#which is also the difference between the means
+mean(cars[cars$am == "Manual",]$mpg) - mean(cars[cars$am == "Auto",]$mpg)
+
+We can also do a T-Test on the data
+
+t.test(cars[cars$am == "Auto",]$mpg, cars[cars$am == "Manual",]$mpg) 
+
+which results on a p-value of 0.001374 (well bellow 5%) so quoting the output: "the alternative hypothesis is true: the difference in means is not equal to 0"
+
+This answers our first question, "Is an automatic or manual transmission better for MPG ?"
+
+
+At this point we already know that the mean gallons per mile of "Manual"" cars is 7.244 MPGs higher than that of "Auto" cars and that the R^2 value is 0.3598, which means that this model only explains 35.98% of the variance. This is quite a  poor fit so We'll try some Multi-Variable Analysis To find a better fitting model.
+
+
+
+The question at this point is: which other variable to include?
+Initially it would be intuitive to include hp (Gross horsepower), wt (weight) and qsec (1/4 mile time) because in theory the power, weight and speed would directly affect a car's consuption.
+
+
+In order to check that, we are going to fit a model will all variables and them use the "step" function to check which variables best fit the model
+
+fitall <- lm(mpg ~ ., data=cars)
+goodfit<- step(fitall, trace=0)
+summary(goodfit)
+
+The function outputs 3 variable wt, qsec and "amManual", which confirms our "intuition".
+Actually if we check the p-values of out fitall model we can see that wt, am and qsec are the lowest p-values (and hp is the forth), so not a bad prediction
+
+Looking at the coeficinets we can see for example that the wt coeficient is -3.9165, whihc means that each point increased in mpg will decrease the weight in -3.9165. A better way to interpret that is: Increasing the weight of a car by 3916.5 lb will cause a decrease of 1 milles per gallon, whihc makes sense because it is intuitive that a heavier car does less miles per 1 gallon of fuel.
+
+
+
+we can also see that R^2 is 0.8497 which means that this model explains 85% of the variance
+
+summary(fitall)$coef[,4]
+
+
+
+Conclusion
+
+cars with Manual Transmission are better than cars with automatic transmission by 2.9 mpg. However, it is not the only factor that affects MPG, a car's weight and its acceleration (1/4 mile time) also seem to affect the result.
+

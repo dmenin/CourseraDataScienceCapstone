@@ -1,0 +1,201 @@
+---
+title: " Impact of Severe Weather Events"
+author: "Diego Menin"
+date: "`r Sys.Date()`"
+---
+
+<br/>
+Disclaimer
+This Documnent is part of the Peer Assessment 2 from the  Reproducible Research Course on the Coursera Data science Specialization.
+The information contained here is for general information purposes only.
+Any reliance you place on such information is therefore strictly at your own risk.
+I cannot accept any liability for the consequences of any actions taken on the basis of the information here provided.
+
+
+<br />
+
+## Synopsis
+
+This analysis was conducted using the data from NOAA Storm Database in order to answer some basic questions about severe weather events. The overall goal of the analysis is to define, across the US, which types of eventsare most harmful with to population health and which types of events have the greatest economic consequence.
+
+<br />
+## Data Processing
+
+The data is processed from a file called repdata-data-StormData that is presumed to be on your working directory.
+
+```{r message=FALSE}
+#register the necessary libraries
+library(plyr)
+library(ggplot2)
+
+data <- read.csv("repdata-data-StormData.csv.bz2")
+
+#all these columns names are transformed to lower case to facilitate the analysis.
+#Also, all the columns that are not necessary are removed
+
+names(data) <- tolower(names(data))
+
+data<-subset(data, select = -c(state__, bgn_date, bgn_time, time_zone, county, countyname, 
+                               state, bgn_range, bgn_azi, bgn_locati, end_date, end_time, 
+                               county_end, countyendn, end_range, end_azi, end_locati,
+                               length, width, f, mag, wfo, stateoffic, zonenames, latitude, 
+                               longitude, latitude_e, longitude_,remarks, refnum))
+
+```
+
+<br />
+Once the data is loaded, its  processing is done in 3 parts
+
+1) The fatal score is calculated by event using the number of fatalities and the number of injuries.
+A higher weight was assigned to a fatality in comparisson to an injury.
+On the last step of the data processing, when the data is aggreagted at event level, the score will be divided by 1000 to simplify the analysis.
+
+```{r message=FALSE}
+data$fatalscore <- (data$fatalities * 10) + data$injuries
+
+data<-subset(data, select = -c(fatalities, injuries)) #dont need them anymore
+```
+
+2) The property damage and the crop damage are calculated by multuplying their damage by their EXP value. The EXP values was  transformed from a description to a numeric field. The EXP relates to the orders of magnitude.
+
+In regards to that, numbers were treated sas an exponent, so for example, 3 means 10^3 = 1000
+
+Letters were treated as follows:
+
+H or h = 2 (hundred = 10^2)
+
+K or k = 3 (thousand = 10^3)
+
+M or m = 6 (million = 10^6)
+
+B or b = 9 (billion = 10^9)
+
+And all other characters (including blanks) were considered 1, therefore not affecting the calculations
+
+```{r message=FALSE}
+#Property Damage
+data$propmult <- revalue(data$propdmgexp, c(" "="1",NULL="1","0"="1","1"="10","2"="100",
+                                            "3"="1000","4"="10000","5"="100000","6"="1000000",
+                                            "7"="10000000","8"="100000000","-"="1","?"="1",
+                                            "+"="1","B"="1000000000","h"="100","H"="100",
+                                            "K"="1000", "M"="1000000","m"="1000000")
+                         , warn_missing = FALSE)
+
+data$propmult <- as.character(data$propmult)
+data$propmult <- as.integer(data$propmult)
+
+
+data$propmult[is.na(data$propmult)] <- 1
+data$propdmg <- data$propdmg * data$propmult
+
+data<-subset(data, select = -c(propdmgexp, propmult)) #dont need them anymore
+
+#Crop damage
+data$cropmult <- revalue(data$cropdmgexp, c(" "="1",NULL="1","0"="1","1"="10","2"="100",
+                                            "3"="1000","4"="10000","5"="100000",
+                                            "6"="1000000","7"="10000000","8"="100000000"
+                                            ,"-"="1","?"="1","+"="1","B"="1000000000",
+                                            "h"="100","H"="100","K"="1000", "M"="1000000",
+                                            "m"="1000000", "k"="1000"), 
+                         warn_missing = FALSE)
+
+data$cropmult <- as.character(data$cropmult)
+data$cropmult <- as.integer(data$cropmult)
+
+data$cropmult[is.na(data$cropmult)] <- 1
+data$cropdmg <- data$cropdmg * data$cropmult
+
+#Total Damage is Added togheter and fields that are no longer necessary are removed
+data$totaldamage <- data$propdmg + data$cropdmg
+
+data<-subset(data, select = -c(cropdmgexp, cropmult, propdmg, cropdmg)) 
+
+```
+
+
+3) Event Type
+
+The event types' names are cleaned and a few of them with similar names are grouped together and summarised.
+Temporary variables are used to group the events in bucktes ordered by total damage and total fatal score
+```{r message=FALSE}
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+data$evtype <- trim(data$evtype)
+
+
+data[grep("TORNADO",data$evtype),c("evtype")] <- 'TORNADO'
+data[grep("THUNDERSTORM",data$evtype),c("evtype")] <- 'THUNDERSTORM'
+
+
+summarydata <- ddply(data, 'evtype', summarise, fatalscore_sum = sum(fatalscore),
+                     dmg_sum  = sum(totaldamage))
+summary_bydmg <- arrange(summarydata, desc(dmg_sum))
+summary_byfatal <- arrange(summarydata, desc(fatalscore_sum))
+
+summary_bydmg<-subset(summary_bydmg, select = -c(fatalscore_sum))
+summary_byfatal<-subset(summary_byfatal, select = -c(dmg_sum))
+
+##summary by dmg
+a <- summary_bydmg [1:19,]
+b <- summary_bydmg [20:883,]
+b$evtype <- 'Other'
+b <- ddply(b, 'evtype', summarise, dmg_sum  = sum(dmg_sum))
+
+summary_bydmg <- rbind(a,b)
+#Into Billion dolars
+summary_bydmg$dmg_sum <- summary_bydmg$dmg_sum/1000000000
+
+
+##summary by fatal
+a <- summary_byfatal [1:19,]
+b <- summary_byfatal [20:883,]
+b$evtype <- 'Other'
+b <- ddply(b, 'evtype', summarise, fatalscore_sum  = sum(fatalscore_sum))
+
+summary_byfatal <- rbind(a,b)
+
+#Divide the score by 1000 to simplify reporting
+summary_byfatal$fatalscore_sum <- summary_byfatal$fatalscore_sum/1000
+```
+
+
+<br/>
+
+## Results
+
+By Looking at the Chart bellow we can conclude that FLOODS had the biggest economic impact among all of the events with over $150 Billion of damage caused. In second place, HURRICANE/TYPHOON with $71 Billion followed closelly by TORNADOS with $60 Billion in Damage. 
+
+Accoring to this report, even by adding "HURRICANE/TYPHOON" and "TORNADO", which are similar event types (hurricanes and typhoons form over water and are huge, while tornados form over land and are much smaller in size), we dont get to the same amount of economic consequenses caused by Floods  
+
+
+```{r message=FALSE, fig.width=7, fig.height=7}
+ ggplot(summary_bydmg, aes(x=evtype, y=dmg_sum, fill=evtype)) +
+    ggtitle("Events with the greatest economic consequences ($Billion)") +
+    
+    geom_bar(stat="identity", color='black') +
+    
+    guides(fill=guide_legend(override.aes=list(colour=NA))) +
+    
+    coord_polar(theta='x') + xlab("") + ylab("")  +  theme(legend.position="none") + 
+  
+    geom_text(aes(label= round(dmg_sum)))
+
+```
+
+
+When it comes to what is the most harmful event with respect to population health, TORNADO is at first place. Tornados are so harmfull in comparisson to others that their score is 6 times bigger than the second most harmfull event.
+
+Remember that the score is calculated considering the number of Injuries and fatalities caused by a particular event (for more information about the calculation, refer to the Data Processing - Item 1 section )
+
+EXCESSIVE HEAT is the second most harmfull event followed by LIGHTNING and TSTM WIND on third and fourth places.
+
+FLOOD, which is in the first place when it comes to economic damage, is on 6th place when it comes to harm to populatin health, and curiously, HURRICANE/TYPHOON which are the second most disastrous event only appears on the  17th place when it comes to harm to people
+
+
+```{r message=FALSE, fig.width=7, fig.height=7}
+
+ggplot(summary_byfatal, aes(x=evtype, y=fatalscore_sum, fill=evtype)) + 
+  geom_bar(stat="identity", color='black') + 
+  xlab("Event type") + ylab("Fatality Score") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+ 
+  theme(legend.position="none") + geom_text(aes(label= round(fatalscore_sum)))
+```
