@@ -1,6 +1,5 @@
 ReadMe
 ===================
-
 Summarizing all the Coursera Repositories in one:
 
 * Class 2: RProgramming
