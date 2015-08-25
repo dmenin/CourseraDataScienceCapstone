@@ -11,6 +11,9 @@ shinyUI(fluidPage(
   br(),  
   br(),    
   br(),    
+  br(),    
+  br(),    
+  br(),    
   
   tags$head(tags$style(HTML("
        body {
