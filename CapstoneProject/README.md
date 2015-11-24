@@ -3,15 +3,9 @@
 * The data product deployed at https://dmenin.shinyapps.io/TextPredicitonApp/ and it should look like this:
 <br>
 
-
-
-
-
-
-
-
-
+<div align="center">
 ![](Miscellaneous//projectimg.png)
+</div>
 
 * Folder Structure:
   * 0SampleModelData folder contains a small (5k rows) twitter file (not viable to store the full file on git)
@@ -62,15 +56,3 @@
 	* TO DO:
 	* maps "." to end on the model build (?)
 	* add the python code to get twitter data to the repo
-
-
-
-
-
-<style type="text/css">
-.table {
-
-    width: 700px
-
-}
-</style>
