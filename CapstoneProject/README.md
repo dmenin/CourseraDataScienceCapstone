@@ -3,9 +3,9 @@
 * The data product deployed at https://dmenin.shinyapps.io/TextPredicitonApp/ and it should look like this:
 <br>
 
-<div align="center">
+
 ![](Miscellaneous//projectimg.png)
-</div>
+
 
 * Folder Structure:
   * 0SampleModelData folder contains a small (5k rows) twitter file (not viable to store the full file on git)
