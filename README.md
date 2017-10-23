@@ -12,4 +12,6 @@ Summarizing all the Coursera Repositories in one:
 * Class 9: Developing Data Products
 * CapstoneProject:
   * Final project. Check folder for more details
+  ![](CapstoneProject//Miscellaneous//projectimg.png)
+
 		
